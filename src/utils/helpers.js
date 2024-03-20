@@ -3,7 +3,7 @@ import {
   soloonsController,
   comethsController,
 } from "../controllers/index.js";
-import { fetchMapState } from "./mapUtils.js";
+import { fetchMapState, getLogoCordinates } from "./mapUtils.js";
 
 // Mapping of astral object types to their respective controllers
 const astralObjectControllers = {
@@ -86,19 +86,18 @@ function parseMapContent(mapContent) {
   return filledCoordinates;
 }
 
-async function clearMapIfNot(mapContent) {
-  const objectsPresent = mapContent.some((row) =>
-    row.some((cell) => cell !== null)
-  );
-  if (objectsPresent) {
-    console.log("Clearing map before creation, this may take a minute...");
-    await clearAstralObjects(mapContent, []);
-  }
-}
+// async function clearMapIfNot(mapContent) {
+//   const objectsPresent = mapContent.some((row) =>
+//     row.some((cell) => cell !== null)
+//   );
+//   if (objectsPresent) {
+//     console.log("Clearing map before creation, this may take a minute...");
+//     await clearAstralObjects(mapContent, []);
+//   }
+// }
 
-export async function createXShape(type = 0, size = 7, additionalInfo1) {
+export async function createXShape(type = 0, size = 7, additionalInfo = {}) {
   const mapContent = await fetchMapState();
-  await clearMapIfNot(mapContent.map.content);
 
   // We will fix this for an 11 X 11 map for now
   const mapSize = 11;
@@ -122,4 +121,38 @@ export async function createXShape(type = 0, size = 7, additionalInfo1) {
   }
   console.log("Creating shape, this may take a minute...")
   await createAstralObjects(mapContent.map.content, desiredCoordinates);
+}
+
+export async function generateMapFromGoalData() {
+    const goal = await getLogoCordinates()
+    const desiredCoordinates = [];
+
+    goal.forEach((row, rowIndex) => {
+        row.forEach((cell, columnIndex) => {
+            if (cell !== 'SPACE') {
+                const { type, additionalInfo } = parseCellTypeAndInfo(cell);
+                if (type !== undefined) { 
+                    desiredCoordinates.push({ row: rowIndex, column: columnIndex, type, additionalInfo });
+                }
+            }
+        });
+    });
+
+    const mapContent = await fetchMapState(); 
+    console.log("Generating Crossmint logo. Please be patient, this will take some time...")
+    await createAstralObjects(mapContent.map.content, desiredCoordinates);
+}
+
+function parseCellTypeAndInfo(cell) {
+    let type, additionalInfo = {};
+    if (cell.includes('POLYANET')) {
+        type = 0; 
+    } else if (cell.includes('COMETH')) {
+        type = 1;
+        additionalInfo.direction = cell.split('_')[0].toLowerCase();
+    } else if (cell.includes('SOLOON')) {
+        type = 2; 
+        additionalInfo.color = cell.split('_')[0].toLowerCase();
+    }
+    return { type, additionalInfo };
 }

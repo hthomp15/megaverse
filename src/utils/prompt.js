@@ -1,5 +1,5 @@
 import readline from "readline";
-import { clearAstralObjects, createXShape } from "./helpers.js";
+import { clearAstralObjects, createXShape, generateMapFromGoalData } from "./helpers.js";
 import { displayMapContent, fetchMapState } from "./mapUtils.js";
 
 const rl = readline.createInterface({
@@ -28,6 +28,9 @@ async function mainPrompt() {
           await createXShape();
           mainPrompt();
           break;
+        case "3":
+          await generateMapFromGoalData();
+          mainPrompt();
         default:
           console.log("Invalid option, please select again.");
           mainPrompt();
@@ -36,6 +39,8 @@ async function mainPrompt() {
   );
 }
 
+
+// These can be useed for creating additional shapes. Went overboard with prompt 1 =)
 function selectAstralObjectType() {
   rl.question(
     "Select Astral Object Type: (0) Polyanet, (1) Cometh, (2) Soloon: ",

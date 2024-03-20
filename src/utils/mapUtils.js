@@ -15,6 +15,18 @@ export async function fetchMapState() {
   }
 }
 
+export async function fetchGoal() {
+  try {
+    const response = await axios.get(`${MAP_BASE_URL}/${CANDIDATE_ID}/goal`, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch map gaol:", error.message);
+    throw error;
+  }
+}
+
 export function displayMapContent(mapData) {
   const { content } = mapData.map;
   const tableData = content.map((row) =>
@@ -25,8 +37,12 @@ export function displayMapContent(mapData) {
 }
 
 export async function fetchAndUpdateMap() {
-    const mapData = await fetchMapState();
-    displayMapContent(mapData);
-    return mapData;
-  }
+  const mapData = await fetchMapState();
+  displayMapContent(mapData);
+  return mapData;
+}
 
+export async function getLogoCordinates() {
+  const coordinates = await fetchGoal();
+  return coordinates.goal
+}
