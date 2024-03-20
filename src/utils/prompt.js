@@ -16,7 +16,7 @@ async function fetchAndUpdateMap() {
 async function mainPrompt() {
   const mapData = await fetchAndUpdateMap();
   rl.question(
-    "Choose an action: (1) Clear map, (2) Create Astral Object: ",
+    "Choose an action: (1) Clear map, (2) Create X Shape, (3) Create Crossmint Logo: ",
     async (option) => {
       switch (option) {
         case "1":
@@ -25,7 +25,8 @@ async function mainPrompt() {
           mainPrompt();
           break;
         case "2":
-          selectAstralObjectType();
+          await createXShape();
+          mainPrompt();
           break;
         default:
           console.log("Invalid option, please select again.");
@@ -99,7 +100,9 @@ It must be at least 3 units and has a maximum of 11 units.
       }
 
       console.log(
-        `Creating an X shape with type ${typeOption}, space ${size}, additional info: ${JSON.stringify(additionalInfo)}`
+        `Creating an X shape with type ${typeOption}, space ${size}, additional info: ${JSON.stringify(
+          additionalInfo
+        )}`
       );
 
       await createXShape(typeOption, size, additionalInfo);

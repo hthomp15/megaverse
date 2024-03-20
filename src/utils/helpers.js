@@ -96,7 +96,7 @@ async function clearMapIfNot(mapContent) {
   }
 }
 
-export async function createXShape(type, size, additionalInfo) {
+export async function createXShape(type = 0, size = 7, additionalInfo1) {
   const mapContent = await fetchMapState();
   await clearMapIfNot(mapContent.map.content);
 
