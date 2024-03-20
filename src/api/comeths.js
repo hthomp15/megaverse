@@ -1,26 +1,26 @@
 import express from 'express';
-import { createCometh, deleteCometh } from '../controllers/comethsController.js';
+import { comethsController } from '../controllers/index.js';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  const { row, column } = req.body;
-  try {
-    const data = await createCometh(row, column);
-    res.status(201).json(data);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating Cometh', error: error.message });
-  }
+router.post('/comeths', async (req, res) => {
+    try {
+        const { row, column } = req.body;
+        await comethsController.create(row, column);
+        res.status(201).send('Cometh created successfully.');
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.delete('/', async (req, res) => {
-  const { row, column } = req.body;
-  try {
-    const data = await deleteCometh(row, column);
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting Cometh', error: error.message });
-  }
+router.delete('/comeths', async (req, res) => {
+    try {
+        const { row, column } = req.body;
+        await comethsController.delete(row, column);
+        res.status(200).send('Cometh deleted successfully.');
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 export default router;
