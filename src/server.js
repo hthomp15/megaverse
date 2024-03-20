@@ -21,7 +21,6 @@ async function startServer() {
     console.log(`Server running on port ${port}`);
 });
 
-  console.log("Current Map State:");
   mainPrompt()
 
 }

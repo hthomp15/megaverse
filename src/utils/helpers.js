@@ -91,9 +91,8 @@ async function clearMapIfNot(mapContent) {
     row.some((cell) => cell !== null)
   );
   if (objectsPresent) {
-    console.log("Clearing map before creating the X shape...");
-    await clearAstralObjects(mapContent, []); // Assuming clearAstralObjects clears all objects
-    console.log("Map cleared.");
+    console.log("Clearing map before creation, this may take a minute...");
+    await clearAstralObjects(mapContent, []);
   }
 }
 
@@ -121,6 +120,6 @@ export async function createXShape(type, size, additionalInfo) {
       additionalInfo
     });
   }
-
+  console.log("Creating shape, this may take a minute...")
   await createAstralObjects(mapContent.map.content, desiredCoordinates);
 }

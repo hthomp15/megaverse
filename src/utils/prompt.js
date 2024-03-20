@@ -22,7 +22,6 @@ async function mainPrompt() {
         case "1":
           console.log("Clearing map. This may take a minute...");
           await clearAstralObjects(mapData.map.content, []);
-          console.log("Map cleared.");
           mainPrompt();
           break;
         case "2":
@@ -87,8 +86,8 @@ function getAdditionalInfo(typeOption) {
 function getShapeDimensions(typeOption, additionalInfo = {}) {
   rl.question(
     `Enter space of the object: 
-    Note: This refers to both the length and width of the object.
-    It must be at least 3 units and has a maximum of 11 units. 
+Note: This refers to both the length and width of the object.
+It must be at least 3 units and has a maximum of 11 units. 
     `,
     async (space) => {
       const size = parseInt(space, 10);
@@ -104,10 +103,6 @@ function getShapeDimensions(typeOption, additionalInfo = {}) {
       );
 
       await createXShape(typeOption, size, additionalInfo);
-
-      // Fetch and display the updated map state
-      const updatedMapData = await fetchAndUpdateMap();
-      displayMapContent(updatedMapData);
       mainPrompt();
     }
   );

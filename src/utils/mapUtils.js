@@ -20,6 +20,7 @@ export function displayMapContent(mapData) {
   const tableData = content.map((row) =>
     row.map((cell) => (cell === null ? "" : cell.type))
   );
+  console.log("Current Map State:")
   console.table(tableData);
 }
 
